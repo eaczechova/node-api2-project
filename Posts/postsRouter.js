@@ -37,14 +37,16 @@ router.get('/:id', (req, res) => {
 });
 
 router.get('/:id/comments', (req, res) => {
-	Posts.findPostComments(req.params.id)
-		.then((comments) => {
-			if (!comments) {
+	Posts.findById(req.params.id)
+		.then((post) => {
+			if (post.length === 0) {
 				res
 					.status(404)
 					.json({ message: 'The post with the specified ID does not exist.' });
 			} else {
-				res.status(200).json(comments);
+				Posts.findPostComments(req.params.id).then((comment) => {
+					res.status(200).json(comment);
+				});
 			}
 		})
 		.catch((error) => {
@@ -74,13 +76,30 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/comments', (req, res) => {
-	const newComment = { ...req.body, post_id: req.params.id };
-	try {
-		const comment = Posts.insertComment(newComment);
-		res.status(201).json(comment);
-	} catch (err) {
-		console.log(err);
-		res.status(500).json({ err });
+	if (!req.body.text) {
+		res
+			.status(400)
+			.json({ errorMessage: 'Please provide text for the comment.' });
+	} else {
+		Posts.findById(req.params.id).then((post) => {
+			if (!post) {
+				res
+					.status(404)
+					.json({ message: 'The post with the specified ID does not exist.' });
+			} else {
+				Posts.insertComment({ text: req.body.text, post_id: Number(req.params.id) })
+					.then((comment) => {
+						res.status(201).json(comment);
+					})
+					.catch((err) =>
+						res
+							.status(500)
+							.json({
+								error: 'There was an error while saving the comment to the database',
+							})
+					);
+			}
+		});
 	}
 });
 
