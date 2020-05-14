@@ -129,6 +129,52 @@ p {
 }
 
 .link {
-  text-decoration: none;
-  color: inherit;
+	text-decoration: none;
+	color: inherit;
+}
+
+.post-editing {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	animation: appear 0.5s ease;
+}
+
+.post-editing input,
+.post-editing textarea {
+	border: none;
+	font-size: 14px;
+	padding: 10px;
+	margin-bottom: 15px;
+	border-bottom: 2px solid transparent;
+}
+
+.post-editing input:focus,
+.post-editing textarea:focus {
+	outline: none;
+	border-bottom: 2px solid rgb(29, 161, 242);
+}
+
+.post-editing button {
+	width: 20%;
+	padding: 10px;
+	background-color: rgb(29, 161, 242);
+	color: #fff;
+	padding: 10px;
+	border-radius: 5px;
+	border: none;
+	font-weight: bold;
+	cursor: pointer;
+	margin: 10px 0 10px auto;
+}
+
+@keyframes appear {
+	0% {
+		opacity: 0;
+		left: -20px;
+	}
+	100% {
+		opacity: 1;
+		left: 0;
+	}
 }

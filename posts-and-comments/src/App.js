@@ -12,6 +12,7 @@ function App() {
 		axios
 			.get('http://localhost:4000/api/posts')
 			.then((res) => {
+				console.log(res.data);
 				setPosts(res.data);
 			})
 			.catch((err) => {
